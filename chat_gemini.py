@@ -3,7 +3,7 @@ from google import genai
 
 app = Flask(__name__)
 
-API_KEY = "AIzaSyD76CT_tg-tshlqhNjZyut8Mk1EHLui3WQ" #suive la video pour voire comment implementer l'api_key pour votre projet
+API_KEY = "suive la video pour voire comment implementer l'api_key pour votre projet"
 
 client = genai.Client(api_key=API_KEY)
 
@@ -36,3 +36,4 @@ def chat_api():
 if __name__ == "__main__":
 
     app.run(debug=True)
+
