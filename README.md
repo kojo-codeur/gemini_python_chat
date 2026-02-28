@@ -1,26 +1,27 @@
-## Kojo Chat – Description du projet
+## **Kojo Chat – Description du projet**
 
-Nom du projet : Kojo Chat
-Technologies utilisées :** Python (Flask), HTML, CSS, JavaScript, Google GenAI (Gemini API)
+**Nom du projet :** Kojo Chat
+**Technologies utilisées :** Python (Flask), HTML, CSS, JavaScript, Google GenAI (Gemini API)
 
-### Description générale :
+### **Description générale :**
 
 Kojo Chat est une application web de chat en ligne interactive qui permet aux utilisateurs de communiquer avec un chatbot intelligent propulsé par le modèle de langage **Gemini** de Google. L’application est conçue pour offrir une expérience proche des applications de messagerie modernes comme WhatsApp, avec des bulles de message stylisées, un affichage mot par mot des réponses et un bouton “copier” pour faciliter l’usage.
 
+---
 
-### Fonctionnalités principales :
+### **Fonctionnalités principales :**
 
-1. Chat en temps réel
+1. **Chat en temps réel**
 
-   Les utilisateurs peuvent envoyer des messages via une interface simple et intuitive.
-   Les réponses du bot apparaissent en bulles, mot par mot, pour un effet naturel de conversation.
+   * Les utilisateurs peuvent envoyer des messages via une interface simple et intuitive.
+   * Les réponses du bot apparaissent en bulles, mot par mot, pour un effet naturel de conversation.
 
-2. Interface moderne et responsive
+2. **Interface moderne et responsive**
 
-   Design inspiré de WhatsApp avec header, zone de messages scrollable et footer avec input.
-   Compatible avec ordinateurs, tablettes et smartphones grâce au responsive design.
+   * Design inspiré de WhatsApp avec header, zone de messages scrollable et footer avec input.
+   * Compatible avec ordinateurs, tablettes et smartphones grâce au responsive design.
 
-3. Messages formatés
+3. **Messages formatés**
 
    * Support du **gras** via `**texte**`.
    * Support des **listes à puces** via `* item`.
