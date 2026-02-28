@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Kojo Chat</title>
+
+    <style>
+      body {
+        margin: 0;
+        font-family: 'Segoe UI', sans-serif;
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+        background: #ece5dd;
+      }
+      
+      /* HEADER */
+      header {
+        background: #075e54;
+        color: white;
+        padding: 15px;
+        font-weight: 600;
+      }
+      
+      /* ZONE MESSAGE */
+      #messages {
+        flex: 1;
+        padding: 15px;
+        overflow-y: auto;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+      
+      /* BULLES */
+      .msg {
+        max-width: 75%;
+        padding: 10px 14px;
+        border-radius: 8px;
+        position: relative;
+        font-size: 14px;
+        line-height: 1.4;
+        word-wrap: break-word;
+      }
+      
+      .user {
+        align-self: flex-end;
+        background: #dcf8c6;
+        border-top-right-radius: 0;
+      }
+      
+      .bot {
+        align-self: flex-start;
+        background: white;
+        border-top-left-radius: 0;
+      }
+      
+      /* BOUTON COPIER */
+      .copy-btn {
+        position: absolute;
+        bottom: 4px;
+        right: 6px;
+        font-size: 12px;
+        cursor: pointer;
+        opacity: 0.6;
+      }
+      
+      .copy-btn:hover {
+        opacity: 1;
+      }
+      
+      /* INPUT */
+      footer {
+        display: flex;
+        padding: 10px;
+        background: #f0f0f0;
+      }
+      
+      input {
+        flex: 1;
+        padding: 10px 15px;
+        border-radius: 20px;
+        border: none;
+        outline: none;
+      }
+      
+      button {
+        margin-left: 10px;
+        padding: 8px 16px;
+        border: none;
+        background: #128c7e;
+        color: white;
+        border-radius: 20px;
+        cursor: pointer;
+      }
+      button:hover {
+        background: #0f7a6c;
+      }
+      
+      ul {
+        padding-left: 18px;
+        margin: 6px 0;
+      }
+    </style>
+  </head>
+
+  <body>
+    <header>Kojo Chat</header>
+
+    <div id="messages"></div>
+
+    <footer>
+      <input id="input" placeholder="Écrire un message..." autocomplete="off" />
+      <button onclick="send()">Envoyer</button>
+    </footer>
+
+    <script>
+      const messages = document.getElementById('messages')
+      const input = document.getElementById('input')
+      
+      /* Ajouter message */
+      function addMessage(type) {
+        const div = document.createElement('div')
+        div.className = 'msg ' + type
+        messages.appendChild(div)
+        messages.scrollTop = messages.scrollHeight
+        return div
+      }
+      
+      /* Format texte (gras + liste) */
+      function formatText(text) {
+        text = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+      
+        const lines = text.split('\n')
+        let result = ''
+        let inList = false
+      
+        lines.forEach((line) => {
+          if (line.startsWith('* ')) {
+            if (!inList) {
+              result += '<ul>'
+              inList = true
+            }
+            result += '<li>' + line.substring(2) + '</li>'
+          } else {
+            if (inList) {
+              result += '</ul>'
+              inList = false
+            }
+            result += line + '<br>'
+          }
+        })
+      
+        if (inList) result += '</ul>'
+        return result
+      }
+      
+      /* Effet mot par mot */
+      function typeEffect(element, text) {
+        const formatted = formatText(text)
+        const words = formatted.split(' ')
+        let i = 0
+      
+        const interval = setInterval(() => {
+          if (i < words.length) {
+            element.innerHTML += words[i] + ' '
+            messages.scrollTop = messages.scrollHeight
+            i++
+          } else {
+            clearInterval(interval)
+            addCopyButton(element, text)
+          }
+        }, 80)
+      }
+      
+      /* Ajouter bouton copier */
+      function addCopyButton(element, rawText) {
+        const copy = document.createElement('span')
+        copy.className = 'copy-btn'
+        copy.textContent = 'COPIER'
+        copy.onclick = () => {
+          navigator.clipboard.writeText(rawText)
+          copy.textContent = 'COPIÉ !'
+          setTimeout(() => (copy.textContent = 'COPIER'), 1000)
+        }
+        element.appendChild(copy)
+      }
+      
+      /* Envoyer */
+      async function send() {
+        const text = input.value.trim()
+        if (!text) return
+      
+        const userDiv = addMessage('user')
+        userDiv.textContent = text
+        input.value = ''
+      
+        const botDiv = addMessage('bot')
+      
+        try {
+          const res = await fetch('/chat', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ message: text })
+          })
+      
+          const data = await res.json()
+          typeEffect(botDiv, data.reply || 'Pas de réponse')
+        } catch (e) {
+          botDiv.textContent = 'Erreur serveur'
+        }
+      }
+      
+      input.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') send()
+      })
+    </script>
+  </body>
+</html>
