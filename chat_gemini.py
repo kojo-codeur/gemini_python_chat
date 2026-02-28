@@ -3,9 +3,8 @@ from google import genai
 
 app = Flask(__name__)
 
-API_KEY = "AIzaSyD76CT_tg-tshlqhNjZyut8Mk1EHLui3WQ"
+API_KEY = "AIzaSyD76CT_tg-tshlqhNjZyut8Mk1EHLui3WQ" #suive la video pour voire comment implementer l'api_key pour votre projet
 
-# Client global
 client = genai.Client(api_key=API_KEY)
 
 MODEL = "gemini-2.5-flash"
@@ -35,4 +34,5 @@ def chat_api():
         return jsonify({"reply": f"Erreur : {str(e)}"}), 500
 
 if __name__ == "__main__":
+
     app.run(debug=True)
